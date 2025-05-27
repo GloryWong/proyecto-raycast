@@ -12,12 +12,26 @@
       "title": "Search Projects",
       "description": "Search for a local project to open",
       "mode": "view"
+    },
+    {
+      "name": "create-project",
+      "title": "Create Project",
+      "description": "Create an empty project",
+      "mode": "no-view",
+      "arguments": [
+        {
+          "name": "name",
+          "type": "text",
+          "placeholder": "project name",
+          "required": true
+        }
+      ]
     }
   ],
   "preferences": [
     {
       "name": "rootDir",
-      "title": "Project directory",
+      "title": "Project Directory",
       "description": "Path to the project directory",
       "type": "directory",
       "required": true,
@@ -25,8 +39,8 @@
     },
     {
       "name": "editor",
-      "title": "Editor",
-      "description": "Path to the editor app",
+      "title": "Default Editor",
+      "description": "Path to the default editor app",
       "type": "appPicker",
       "required": true,
       "default": "/Applications/Visual Studio Code.app"
