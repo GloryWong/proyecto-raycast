@@ -43,7 +43,7 @@ export default function Command() {
   });
 
   return (
-    <List isLoading={isLoading} searchBarPlaceholder="Search for local projects...">
+    <List isLoading={isLoading} searchBarPlaceholder="Search local projects...">
       {items.map((item) => (
         <List.Item
           key={item.id}
