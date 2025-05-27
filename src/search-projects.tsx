@@ -6,41 +6,41 @@ import { toHomeRelativePath } from "./libs/toHomeRelativePath";
 import { ensureDir } from "./libs/ensureDir";
 import { getProjectPath } from "./libs/getProjectPath";
 
-type ProjectType = 'workspace' | 'folder'
+type ProjectType = "workspace" | "folder";
 
-const { editor } = getPreferenceValues<Preferences>()
+const { editor } = getPreferenceValues<Preferences>();
 
 export default function Command() {
   if (!editor) {
-    return (
-      <Detail markdown={ "⚠️ Please configure the extension to choose an **Editor** app to use." } />
-    )
+    return <Detail markdown={"⚠️ Please configure the extension to choose an **Editor** app to use."} />;
   }
 
   if (!ensureDir(ROOT_DIR)) {
-    return (
-      <Detail markdown={ `❌ Failed to create ${ROOT_DIR}` } />
-    )
+    return <Detail markdown={`❌ Failed to create ${ROOT_DIR}`} />;
   }
 
-  const { isLoading, data: items = [], revalidate } = usePromise(async () => {
-    const names = await listProjects()
+  const {
+    isLoading,
+    data: items = [],
+    revalidate,
+  } = usePromise(async () => {
+    const names = await listProjects();
     return names.map((name) => {
-      const type: ProjectType = name.endsWith(VSCODE_WORKSPACE_SUFFIX) ? 'workspace' : 'folder'
-      const typeLabel = (type === 'workspace' ? 'Workspace' : 'Project')
-      const path = getProjectPath(name)
+      const type: ProjectType = name.endsWith(VSCODE_WORKSPACE_SUFFIX) ? "workspace" : "folder";
+      const typeLabel = type === "workspace" ? "Workspace" : "Project";
+      const path = getProjectPath(name);
       return {
         id: name,
         type,
         typeLabel,
-        icon: type === 'workspace' ? Icon.AppWindowGrid2x2 : Icon.Folder,
+        icon: type === "workspace" ? Icon.AppWindowGrid2x2 : Icon.Folder,
         title: name,
         path,
         subtitle: toHomeRelativePath(path),
         accessory: typeLabel,
-      }
-    })
-  })
+      };
+    });
+  });
 
   return (
     <List isLoading={isLoading} searchBarPlaceholder="Search for local projects...">
@@ -54,16 +54,29 @@ export default function Command() {
           actions={
             <ActionPanel>
               <ActionPanel.Section>
-                <Action.Open title={ 'Open in '  + editor.name } icon={{ fileIcon: editor.path}} application={editor} target={item.path} />
+                <Action.Open
+                  title={"Open in " + editor.name}
+                  icon={{ fileIcon: editor.path }}
+                  application={editor}
+                  target={item.path}
+                />
                 <Action.ShowInFinder path={item.path} />
                 <Action.OpenWith path={item.path} shortcut={{ modifiers: ["cmd"], key: "o" }} />
               </ActionPanel.Section>
               <ActionPanel.Section>
-                <Action.CopyToClipboard title="Copy Name" content={item.title} shortcut={{ modifiers: ["cmd"], key: "." }} />
-                <Action.CopyToClipboard title="Copy Path" content={item.path} shortcut={{ modifiers: ["cmd", "shift"], key: "." }} />
+                <Action.CopyToClipboard
+                  title="Copy Name"
+                  content={item.title}
+                  shortcut={{ modifiers: ["cmd"], key: "." }}
+                />
+                <Action.CopyToClipboard
+                  title="Copy Path"
+                  content={item.path}
+                  shortcut={{ modifiers: ["cmd", "shift"], key: "." }}
+                />
               </ActionPanel.Section>
               <ActionPanel.Section>
-                <Action.Trash title={ `Delete ${item.typeLabel}` } paths={item.path} onTrash={revalidate} />
+                <Action.Trash title={`Delete ${item.typeLabel}`} paths={item.path} onTrash={revalidate} />
               </ActionPanel.Section>
             </ActionPanel>
           }

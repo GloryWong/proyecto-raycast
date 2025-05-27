@@ -1,6 +1,6 @@
-import { listProjects } from "./listProjects"
+import { listProjects } from "./listProjects";
 
 export async function projectExists(name: string) {
-  const dir = await listProjects()
-  return dir.includes(name)
+  const dir = await listProjects();
+  return dir.includes(name);
 }

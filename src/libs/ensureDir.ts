@@ -1,23 +1,23 @@
-import { showToast, Toast } from "@raycast/api"
-import { existsSync, mkdirSync } from "fs"
-import { toHomeRelativePath } from "./toHomeRelativePath"
+import { showToast, Toast } from "@raycast/api";
+import { existsSync, mkdirSync } from "fs";
+import { toHomeRelativePath } from "./toHomeRelativePath";
 
 export function ensureDir(dir: string) {
-  if (existsSync(dir)) return true
+  if (existsSync(dir)) return true;
 
   try {
-    mkdirSync(dir, { recursive: true })
+    mkdirSync(dir, { recursive: true });
     showToast({
       title: `Directory ${toHomeRelativePath(dir)} is created`,
-      style: Toast.Style.Success
-    })
-    return true
+      style: Toast.Style.Success,
+    });
+    return true;
   } catch (error) {
     showToast({
       title: `Failed to create to directory ${toHomeRelativePath(dir)}`,
       message: error as string,
-      style: Toast.Style.Failure
-    })
-    return false
+      style: Toast.Style.Failure,
+    });
+    return false;
   }
 }

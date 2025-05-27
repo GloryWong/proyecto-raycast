@@ -52,12 +52,16 @@
     "fuzzysort": "^3.1.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
     "@raycast/eslint-config": "^2.0.4",
     "@types/node": "22.13.10",
     "@types/react": "19.0.10",
     "eslint": "^9.22.0",
+    "lint-staged": "^16.1.0",
     "prettier": "^3.5.3",
     "react-devtools": "6.1.1",
+    "simple-git-hooks": "^2.13.0",
     "typescript": "^5.8.2"
   },
   "scripts": {
@@ -66,6 +70,11 @@
     "fix-lint": "ray lint --fix",
     "lint": "ray lint",
     "prepublishOnly": "echo \"\\n\\nIt seems like you are trying to publish the Raycast extension to npm.\\n\\nIf you did intend to publish it to npm, remove the \\`prepublishOnly\\` script and rerun \\`npm publish\\` again.\\nIf you wanted to publish it to the Raycast Store instead, use \\`npm run publish\\` instead.\\n\\n\" && exit 1",
-    "publish": "npx @raycast/api@latest publish"
+    "publish": "npx @raycast/api@latest publish",
+    "prepare": "npm run simple-git-hooks"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npm run lint-staged",
+    "commit-msg": "npm run commitlint --edit ${1}"
   }
 }
