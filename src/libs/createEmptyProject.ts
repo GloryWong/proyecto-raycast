@@ -5,7 +5,15 @@ import { ensureDir } from "./ensureDir"
 import { initGit } from "./initGit"
 import { getProjectPath } from "./getProjectPath"
 
-export async function createEmptyProject(name: string) {
+interface ReturnValue {
+  success: boolean
+  /**
+   * Reason for failure
+   */
+  reason?: 'invalid' | 'existent' | 'cancel' | 'fail'
+}
+
+export async function createEmptyProject(name: string): Promise<ReturnValue> {
   const result = isValidProjectName(name)
   if (!result.valid) {
     await showToast({
@@ -13,7 +21,10 @@ export async function createEmptyProject(name: string) {
       message: result.error,
       style: Toast.Style.Failure
     })
-    return false
+    return {
+      success: false,
+      reason: 'invalid'
+    }
   }
 
   const existent = await projectExists(name)
@@ -22,7 +33,10 @@ export async function createEmptyProject(name: string) {
       title: `Project "${name}" already exists`,
       style: Toast.Style.Failure
     })
-    return false
+    return {
+      success: false,
+      reason: 'existent'
+    }
   }
 
   const dir = getProjectPath(name)
@@ -32,11 +46,21 @@ export async function createEmptyProject(name: string) {
     message: `Are you sure you want to create project "${name}"?`,
     icon: Icon.NewFolder
   }))) {
-    return false
+    return {
+      success: false,
+      reason: 'cancel'
+    }
   }
 
   if (!ensureDir(dir))
-    return false
+    return {
+      success: false,
+      reason: 'fail'
+    }
 
-  return initGit(dir)
+  await initGit(dir)
+
+  return {
+    success: true
+  }
 }
