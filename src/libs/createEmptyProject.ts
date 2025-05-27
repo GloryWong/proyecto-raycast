@@ -1,4 +1,4 @@
-import { confirmAlert, showToast, Toast } from "@raycast/api"
+import { confirmAlert, Icon, showToast, Toast } from "@raycast/api"
 import { isValidProjectName } from "./isValidProjectName"
 import { projectExists } from "./projectExists"
 import { ensureDir } from "./ensureDir"
@@ -28,8 +28,9 @@ export async function createEmptyProject(name: string) {
   const dir = getProjectPath(name)
 
   if (!(await confirmAlert({
-    title: `Are you sure to create project "${name}"?`,
-    rememberUserChoice: true
+    title: 'Confirm creation',
+    message: `Are you sure you want to create project "${name}"?`,
+    icon: Icon.NewFolder
   }))) {
     return false
   }

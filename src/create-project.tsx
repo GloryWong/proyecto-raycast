@@ -14,8 +14,8 @@ export default async function Command(props: LaunchProps<{ arguments: Arguments.
 
   const name = props.arguments.name
   if (await createEmptyProject(name) && await confirmAlert({
-    title: `Do you want to open "${name}" in the default editor ${editor.name}?`,
-    message: 'Project is created!',
+    title: 'Project is created!',
+    message: `Do you want to open "${name}" in ${editor.name}?`,
     icon: { fileIcon: editor.path },
     primaryAction: {
       title: 'Open',

@@ -2,9 +2,9 @@ import { ActionPanel, Action, Icon, List, getPreferenceValues, Detail } from "@r
 import { usePromise } from "@raycast/utils";
 import { listProjects } from "./libs/listProjects";
 import { ROOT_DIR, VSCODE_WORKSPACE_SUFFIX } from "./libs/constants";
-import { join } from "node:path";
 import { toHomeRelativePath } from "./libs/toHomeRelativePath";
 import { ensureDir } from "./libs/ensureDir";
+import { getProjectPath } from "./libs/getProjectPath";
 
 type ProjectType = 'workspace' | 'folder'
 
@@ -23,19 +23,21 @@ export default function Command() {
     )
   }
 
-  const { isLoading, data: items = [] } = usePromise(async () => {
+  const { isLoading, data: items = [], revalidate } = usePromise(async () => {
     const names = await listProjects()
     return names.map((name) => {
       const type: ProjectType = name.endsWith(VSCODE_WORKSPACE_SUFFIX) ? 'workspace' : 'folder'
-      const path = join(ROOT_DIR, name)
+      const typeLabel = (type === 'workspace' ? 'Workspace' : 'Project')
+      const path = getProjectPath(name)
       return {
         id: name,
         type,
+        typeLabel,
         icon: type === 'workspace' ? Icon.AppWindowGrid2x2 : Icon.Folder,
         title: name,
         path,
         subtitle: toHomeRelativePath(path),
-        // accessory: "Accessory",
+        accessory: typeLabel,
       }
     })
   })
@@ -48,17 +50,20 @@ export default function Command() {
           icon={item.icon}
           title={item.title}
           subtitle={item.subtitle}
-          // accessories={[{ icon: Icon.Text, text: item.accessory }]}
+          accessories={[{ text: item.accessory }]}
           actions={
             <ActionPanel>
               <ActionPanel.Section>
-                <Action.Open title={ 'Open ' + (item.type === 'workspace' ? 'Workspace' : 'Project') + ' in ' + editor.name } icon={{ fileIcon: editor.path}} application={editor} target={item.path} />
+                <Action.Open title={ 'Open in '  + editor.name } icon={{ fileIcon: editor.path}} application={editor} target={item.path} />
                 <Action.ShowInFinder path={item.path} />
                 <Action.OpenWith path={item.path} shortcut={{ modifiers: ["cmd"], key: "o" }} />
               </ActionPanel.Section>
               <ActionPanel.Section>
                 <Action.CopyToClipboard title="Copy Name" content={item.title} shortcut={{ modifiers: ["cmd"], key: "." }} />
                 <Action.CopyToClipboard title="Copy Path" content={item.path} shortcut={{ modifiers: ["cmd", "shift"], key: "." }} />
+              </ActionPanel.Section>
+              <ActionPanel.Section>
+                <Action.Trash title={ `Delete ${item.typeLabel}` } paths={item.path} onTrash={revalidate} />
               </ActionPanel.Section>
             </ActionPanel>
           }
