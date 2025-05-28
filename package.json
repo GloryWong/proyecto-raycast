@@ -6,6 +6,10 @@
   "icon": "extension-icon.png",
   "author": "glorywong",
   "license": "MIT",
+  "categories": [
+    "Productivity",
+    "Developer Tools"
+  ],
   "commands": [
     {
       "name": "search-project",
@@ -31,8 +35,8 @@
   "preferences": [
     {
       "name": "rootDir",
-      "title": "Project Directory",
-      "description": "Path to the project directory",
+      "title": "Project Folder",
+      "description": "Path to the project folder",
       "type": "directory",
       "required": true,
       "default": "~/Projects"

@@ -8,13 +8,13 @@ export function ensureDir(dir: string) {
   try {
     mkdirSync(dir, { recursive: true });
     showToast({
-      title: `Directory ${toHomeRelativePath(dir)} is created`,
+      title: `Folder ${toHomeRelativePath(dir)} is created`,
       style: Toast.Style.Success,
     });
     return true;
   } catch (error) {
     showToast({
-      title: `Failed to create to directory ${toHomeRelativePath(dir)}`,
+      title: `Failed to create to folder ${toHomeRelativePath(dir)}`,
       message: error as string,
       style: Toast.Style.Failure,
     });
