@@ -1,3 +1,3 @@
 export default {
-  "*": () => "npm run fix-lint",
+  ".{ts,tsx,js,jsx}": () => "npm run fix-lint",
 }

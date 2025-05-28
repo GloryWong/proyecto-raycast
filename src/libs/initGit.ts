@@ -1,4 +1,5 @@
 import { showToast, Toast } from "@raycast/api";
+import { showFailureToast } from "@raycast/utils";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 
@@ -15,10 +16,8 @@ export async function initGit(dir: string) {
 
     return true;
   } catch (error) {
-    await showToast({
+    await showFailureToast(error, {
       title: "Failed to initialize with git",
-      message: error as string,
-      style: Toast.Style.Failure,
     });
     return false;
   }
