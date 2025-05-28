@@ -14,7 +14,6 @@ export default async function Command(props: LaunchProps<{ arguments: Arguments.
       });
       return;
     }
-
     const name = props.arguments.name;
     const { success, reason } = await createEmptyProject(name);
     if (
@@ -31,7 +30,6 @@ export default async function Command(props: LaunchProps<{ arguments: Arguments.
       await open(getProjectPath(name), editor);
       return;
     }
-
     if (
       !success &&
       reason === "existent" &&
