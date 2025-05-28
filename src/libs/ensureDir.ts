@@ -1,6 +1,7 @@
 import { showToast, Toast } from "@raycast/api";
 import { existsSync, mkdirSync } from "fs";
 import { toHomeRelativePath } from "./toHomeRelativePath";
+import { showFailureToast } from "@raycast/utils";
 
 export function ensureDir(dir: string) {
   if (existsSync(dir)) return true;
@@ -13,11 +14,9 @@ export function ensureDir(dir: string) {
     });
     return true;
   } catch (error) {
-    showToast({
-      title: `Failed to create to folder ${toHomeRelativePath(dir)}`,
-      message: error as string,
-      style: Toast.Style.Failure,
-    });
+    showFailureToast(error, {
+      title: `Failed to create folder ${toHomeRelativePath(dir)}`,
+    })
     return false;
   }
 }

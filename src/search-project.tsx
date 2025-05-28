@@ -16,7 +16,7 @@ export default function Command() {
   }
 
   if (!ensureDir(ROOT_DIR)) {
-    return <Detail markdown={`❌ Failed to create ${ROOT_DIR}`} />;
+    return <Detail markdown={`❌ Failed to create the folder ${ROOT_DIR}`} />;
   }
 
   const {
